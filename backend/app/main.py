@@ -2,11 +2,13 @@
 
 from __future__ import annotations
 
+from pathlib import Path
 from typing import Any, Literal
 
 from fastapi import FastAPI, File, HTTPException, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import StreamingResponse
+from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel, Field
 
 from . import llm, tools
@@ -96,3 +98,10 @@ def documents() -> dict[str, Any]:
 def clear_documents() -> dict[str, Any]:
     store.clear()
     return {"documents": [], "chunks": 0}
+
+
+# Single-container deployments (see Dockerfile.prod) copy the built frontend here.
+# Mounted last so it never shadows the /api/* routes above.
+_static_dir = Path(__file__).resolve().parent.parent / "static"
+if _static_dir.is_dir():
+    app.mount("/", StaticFiles(directory=_static_dir, html=True), name="frontend")
