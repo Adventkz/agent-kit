@@ -1,5 +1,16 @@
 .env
 data/
+
+# AI / dev tool config (never commit)
+.claude/
+CLAUDE.md
+.cursor/
+.aider*
+.windsurf/
+.codeium/
+.continue/
+.devin/
+.copilot/
 __pycache__/
 *.py[cod]
 .venv/
