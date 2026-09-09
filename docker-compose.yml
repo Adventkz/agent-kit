@@ -1,0 +1,20 @@
+services:
+  backend:
+    build: ./backend
+    env_file: .env
+    environment:
+      DATA_DIR: /data
+      CORS_ORIGINS: http://localhost:5173,http://localhost:4173
+    volumes:
+      - ./backend/data:/data
+    ports:
+      - "8000:8000"
+
+  frontend:
+    build: ./frontend
+    environment:
+      VITE_API_URL: http://localhost:8000
+    ports:
+      - "5173:5173"
+    depends_on:
+      - backend
